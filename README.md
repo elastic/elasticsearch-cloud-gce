@@ -3,12 +3,14 @@ Google Compute Engine Cloud Plugin for Elasticsearch
 
 The GCE Cloud plugin allows to use GCE API for the unicast discovery mechanism.
 
-In order to install the plugin, simply run: `bin/plugin -install elasticsearch/elasticsearch-cloud-gce/1.1.0`.
+In order to install the plugin, simply run: `bin/plugin -install elasticsearch/elasticsearch-cloud-gce/1.2.0`.
 
 |       GCE Cloud Plugin     |    elasticsearch    |   gce api    | Release date |
 |----------------------------|---------------------|--------------|:------------:|
-| 2.0.0.RC1-SNAPSHOT (master)| 1.0.0.RC1 -> master |  1.17.0-rc   |              |
-| 1.2.0-SNAPSHOT (1.x)       | 0.90.3 -> 0.90      |  1.17.0-rc   |              |
+| 2.0.0-SNAPSHOT (master)    | 1.0.0.RC1 -> master |  1.17.0-rc   |              |
+| 2.0.0.RC1                  | 1.0.0.RC1 -> master |  1.15.0-rc   |  2014-01-15  |
+| 1.3.0-SNAPSHOT (1.x)       | 0.90.3 -> 0.90      |  1.17.0-rc   |              |
+| 1.2.0                      | 0.90.3 -> 0.90      |  1.17.0-rc   |  2014-01-29  |
 | 1.1.0                      | 0.90.3 -> 0.90      |  1.15.0-rc   |  2013-08-09  |
 | 1.0.0                      | 0.90.0 -> 0.90.2    |  1.15.0-rc   |  2013-07-23  |
 
@@ -133,8 +135,8 @@ Install the plugin:
 
 ```sh
 # Use Plugin Manager to install it
-sudo /usr/share/elasticsearch/bin/plugin
-     --install elasticsearch/elasticsearch-cloud-gce/1.1.0
+sudo /usr/share/elasticsearch/bin/plugin \
+     --install elasticsearch/elasticsearch-cloud-gce/1.2.0
 
 # Configure it:
 sudo vi /etc/elasticsearch/elasticsearch.yml
