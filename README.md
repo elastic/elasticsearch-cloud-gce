@@ -3,7 +3,7 @@ Google Compute Engine Cloud Plugin for Elasticsearch
 
 The GCE Cloud plugin allows to use GCE API for the unicast discovery mechanism.
 
-In order to install the plugin, simply run: `bin/plugin -install elasticsearch/elasticsearch-cloud-gce/1.2.0`.
+In order to install the plugin, simply run: `bin/plugin -install elasticsearch/elasticsearch-cloud-gce/1.3.0`.
 
 * For master elasticsearch versions, look at [master branch](https://github.com/elasticsearch/elasticsearch-cloud-gce/tree/master).
 * For 1.1.x elasticsearch versions, look at [es-1.1 branch](https://github.com/elasticsearch/elasticsearch-cloud-gce/tree/es-1.1).
@@ -12,14 +12,14 @@ In order to install the plugin, simply run: `bin/plugin -install elasticsearch/e
 
 |       GCE Cloud Plugin     |    elasticsearch    |   gce api    | Release date |
 |----------------------------|---------------------|--------------|:------------:|
-| 1.3.0-SNAPSHOT             | 0.90.3 -> 0.90      |  1.18.0-rc   |  XXXX-XX-XX  |
+| 1.3.0                      | 0.90.3 -> 0.90      |  1.18.0-rc   |  2014-04-16  |
 | 1.2.0                      | 0.90.3 -> 0.90      |  1.17.0-rc   |  2014-01-29  |
 | 1.1.0                      | 0.90.3 -> 0.90      |  1.15.0-rc   |  2013-08-09  |
 | 1.0.0                      | 0.90.0 -> 0.90.2    |  1.15.0-rc   |  2013-07-23  |
 
 Please read documentation relative to the version you are using:
 
-* [1.3.0-SNAPSHOT](https://github.com/elasticsearch/elasticsearch-cloud-gce/blob/es-0.90/README.md)
+* [1.3.0](https://github.com/elasticsearch/elasticsearch-cloud-gce/blob/v1.3.0/README.md)
 * [1.2.0](https://github.com/elasticsearch/elasticsearch-cloud-gce/blob/v1.2.0/README.md)
 * [1.1.0](https://github.com/elasticsearch/elasticsearch-cloud-gce/blob/v1.1.0/README.md)
 * [1.0.0](https://github.com/elasticsearch/elasticsearch-cloud-gce/blob/v1.0.0/README.md)
