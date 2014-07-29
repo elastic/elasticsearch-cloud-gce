@@ -98,7 +98,11 @@ public class GceComputeServiceImpl extends AbstractLifecycleComponent<GceCompute
             JSON_FACTORY = new JacksonFactory();
 
             logger.info("starting GCE discovery service");
-            ComputeCredential credential = new ComputeCredential.Builder(HTTP_TRANSPORT, JSON_FACTORY).build();
+
+            ComputeCredential credential = new ComputeCredential.Builder(HTTP_TRANSPORT, JSON_FACTORY).
+                    setTokenServerEncodedUrl("http://metadata.google.internal/computeMetadata/v1/instance/service-accounts/default/token").
+                    build();
+
             credential.refreshToken();
 
             logger.debug("token [{}] will expire in [{}] s", credential.getAccessToken(), credential.getExpiresInSeconds());
