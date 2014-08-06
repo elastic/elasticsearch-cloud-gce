@@ -31,7 +31,7 @@ multicast environments). Here is a simple sample configuration:
   cloud:
       gce:
           project_id: <your-google-project-id>
-          zone: <your-zone>
+          zone: [<your-zone-1>,<your-zone-2>...<your-zone-n>]
   discovery:
           type: gce
 ```
@@ -138,7 +138,7 @@ And add the following lines:
 cloud:
   gce:
       project_id: es-cloud
-      zone: europe-west1-a
+      zone: ["europe-west1-a"]
 discovery:
       type: gce
 ```
@@ -251,7 +251,7 @@ Then, define it in `elasticsearch.yml`:
 cloud:
   gce:
       project_id: es-cloud
-      zone: europe-west1-a
+      zone: ["europe-west1-a"]
 discovery:
       type: gce
       gce:
