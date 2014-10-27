@@ -50,7 +50,7 @@ governing permissions and limitations under the License. -->
     <properties>
         <elasticsearch.version>2.0.0-SNAPSHOT</elasticsearch.version>
         <google.gce.version>v1-rev15-1.18.0-rc</google.gce.version>
-        <google.api.version>1.18.0-rc</google.api.version>
+        <google.api.version>1.19.0</google.api.version>
         <lucene.version>5.0.0</lucene.version>
         <lucene.maven.version>5.0.0-snapshot-1637347</lucene.maven.version>
         <tests.shuffle>true</tests.shuffle>
