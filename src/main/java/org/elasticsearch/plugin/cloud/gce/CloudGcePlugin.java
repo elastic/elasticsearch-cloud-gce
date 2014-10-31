@@ -23,8 +23,13 @@ import org.elasticsearch.cloud.gce.GceModule;
 import org.elasticsearch.common.collect.Lists;
 import org.elasticsearch.common.component.LifecycleComponent;
 import org.elasticsearch.common.inject.Module;
+import org.elasticsearch.common.logging.ESLogger;
+import org.elasticsearch.common.logging.ESLoggerFactory;
 import org.elasticsearch.common.settings.Settings;
 import org.elasticsearch.plugins.AbstractPlugin;
+import org.elasticsearch.repositories.RepositoriesModule;
+import org.elasticsearch.repositories.gce.GoogleCloudStorageRepository;
+import org.elasticsearch.repositories.gce.GoogleCloudStorageRepositoryModule;
 
 import java.util.Collection;
 
@@ -50,21 +55,27 @@ public class CloudGcePlugin extends AbstractPlugin {
     }
 
     @Override
-    public Collection<Class<? extends Module>> modules() {
-        Collection<Class<? extends Module>> modules = Lists.newArrayList();
+    public Collection<Module> modules(Settings settings) {
+        Collection<Module> modules = Lists.newArrayList();
         if (settings.getAsBoolean("cloud.enabled", true)) {
-            modules.add(GceModule.class);
+            modules.add(new GceModule(settings));
         }
         return modules;
     }
+
 
     @Override
     public Collection<Class<? extends LifecycleComponent>> services() {
         Collection<Class<? extends LifecycleComponent>> services = Lists.newArrayList();
         if (settings.getAsBoolean("cloud.enabled", true)) {
-//            services.add(GceComputeServiceImpl.class);
+            services.add(GceModule.getGoogleCloudStorageServiceClass(settings));
         }
         return services;
     }
 
+    public void onModule(RepositoriesModule repositoriesModule) {
+        if (settings.getAsBoolean("cloud.enabled", true)) {
+            repositoriesModule.registerRepository(GoogleCloudStorageRepository.TYPE, GoogleCloudStorageRepositoryModule.class);
+        }
+    }
 }
