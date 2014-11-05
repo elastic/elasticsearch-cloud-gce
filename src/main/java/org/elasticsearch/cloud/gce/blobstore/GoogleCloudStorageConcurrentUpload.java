@@ -81,16 +81,11 @@ public class GoogleCloudStorageConcurrentUpload implements ConcurrentUpload<Stor
 
     @Override
     public void waitForCompletion() {
-        while ((done.getCount() > 0) && (exception == null)) {
-            try {
-                boolean completed = done.await(50, TimeUnit.MILLISECONDS);
-                if (completed) {
-                    return;
-                }
-            } catch (InterruptedException e) {
-                Thread.currentThread().interrupt();
-                exception = e;
-            }
+        try {
+            done.await(60, TimeUnit.SECONDS);
+        } catch (InterruptedException e) {
+            Thread.currentThread().interrupt();
+            exception = e;
         }
     }
 
