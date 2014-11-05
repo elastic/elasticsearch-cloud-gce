@@ -27,6 +27,7 @@ import org.elasticsearch.common.blobstore.BlobStore;
 import org.elasticsearch.common.inject.Inject;
 import org.elasticsearch.common.unit.ByteSizeUnit;
 import org.elasticsearch.common.unit.ByteSizeValue;
+import org.elasticsearch.common.util.concurrent.EsExecutors;
 import org.elasticsearch.index.snapshots.IndexShardRepository;
 import org.elasticsearch.repositories.RepositoryException;
 import org.elasticsearch.repositories.RepositoryName;
@@ -35,6 +36,8 @@ import org.elasticsearch.repositories.blobstore.BlobStoreRepository;
 
 import java.io.IOException;
 import java.util.Locale;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.TimeUnit;
 
 import static org.elasticsearch.cloud.gce.GoogleCloudStorageService.Fields.*;
 
@@ -101,9 +104,12 @@ public class GoogleCloudStorageRepository extends BlobStoreRepository {
             this.basePath = BlobPath.cleanPath();
         }
 
+        int concurrentStreams = repositorySettings.settings().getAsInt("concurrent_streams", componentSettings.getAsInt("concurrent_streams", 5));
+        ExecutorService concurrentStreamPool = EsExecutors.newScaling(1, concurrentStreams, 5, TimeUnit.SECONDS, EsExecutors.daemonThreadFactory(settings, "[s3_stream]"));
+
         logger.debug("using  projet id [{}], bucket [{}], location [{}], base_path [{}], chunk_size [{}], compress [{}]",
                 projectId, bucketName, bucketLocation, basePath, chunkSize, compress);
-        this.blobStore = new GoogleCloudStorageBlobStore(settings, googleCloudStorageService, projectId, bucketName, bucketLocation);
+        this.blobStore = new GoogleCloudStorageBlobStore(settings, concurrentStreamPool, googleCloudStorageService, projectId, bucketName, bucketLocation);
     }
 
 

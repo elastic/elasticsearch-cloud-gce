@@ -30,6 +30,7 @@ import org.elasticsearch.common.settings.Settings;
 
 import java.io.IOException;
 import java.nio.file.FileAlreadyExistsException;
+import java.util.concurrent.Executor;
 
 import static java.net.HttpURLConnection.HTTP_CONFLICT;
 
@@ -38,12 +39,15 @@ import static java.net.HttpURLConnection.HTTP_CONFLICT;
  */
 public class GoogleCloudStorageBlobStore extends AbstractComponent implements BlobStore {
 
+    private final Executor executor;
+
     private final GoogleCloudStorageService client;
 
     private final String bucket;
 
-    public GoogleCloudStorageBlobStore(Settings settings, GoogleCloudStorageService client, String projectName, String bucketName, String bucketLocation) throws IOException {
+    public GoogleCloudStorageBlobStore(Settings settings, Executor executor, GoogleCloudStorageService client, String projectName, String bucketName, String bucketLocation) throws IOException {
         super(settings);
+        this.executor = executor;
         this.client = client;
         this.bucket = bucketName;
 
@@ -67,6 +71,10 @@ public class GoogleCloudStorageBlobStore extends AbstractComponent implements Bl
         }
     }
 
+    public Executor executor() {
+        return executor;
+    }
+    
     public GoogleCloudStorageService client() {
         return client;
     }

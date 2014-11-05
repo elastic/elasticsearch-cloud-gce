@@ -27,7 +27,7 @@ import org.elasticsearch.common.component.LifecycleComponent;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
-import java.security.GeneralSecurityException;
+import java.util.concurrent.Executor;
 
 public interface GoogleCloudStorageService extends LifecycleComponent<GoogleCloudStorageService> {
 
@@ -101,11 +101,12 @@ public interface GoogleCloudStorageService extends LifecycleComponent<GoogleClou
     /**
      * Returns an {@link java.io.OutputStream} that can be used to write blobs.
      *
+     * @param  executor
      * @param bucketName
      * @param blobName
      * @return
      */
-    OutputStream getOutputStream(String bucketName, String blobName) throws IOException;
+    OutputStream getOutputStream(Executor executor, String bucketName, String blobName) throws IOException;
 
     /**
      * List all blobs in a given bucket which have a prefix

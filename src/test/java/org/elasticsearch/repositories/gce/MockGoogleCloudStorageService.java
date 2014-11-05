@@ -39,6 +39,7 @@ import java.util.Map;
 import java.util.Set;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.CopyOnWriteArraySet;
+import java.util.concurrent.Executor;
 
 /**
  * In memory storage for unit tests
@@ -148,7 +149,7 @@ public class MockGoogleCloudStorageService extends AbstractLifecycleComponent<Go
     }
 
     @Override
-    public OutputStream getOutputStream(String bucketName, String blobName) throws IOException {
+    public OutputStream getOutputStream(Executor executor, String bucketName, String blobName) throws IOException {
         ByteArrayOutputStream outputStream = new ByteArrayOutputStream();
         blobs.put(key(bucketName, blobName), outputStream);
         return outputStream;

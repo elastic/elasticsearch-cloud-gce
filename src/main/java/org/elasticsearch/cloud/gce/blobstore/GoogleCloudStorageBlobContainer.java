@@ -86,7 +86,7 @@ public class GoogleCloudStorageBlobContainer extends AbstractBlobContainer {
 
     @Override
     public OutputStream createOutput(String blobName) throws IOException {
-        return blobStore.client().getOutputStream(blobStore.bucket(), buildKey(blobName));
+        return blobStore.client().getOutputStream(blobStore.executor(), blobStore.bucket(), buildKey(blobName));
     }
 
     @Override

@@ -67,6 +67,7 @@ public class GoogleCloudStorageSnapshotRestoreITest extends AbstractGoogleCloudS
                 .setType(GoogleCloudStorageRepository.TYPE)
                 .setSettings(ImmutableSettings.settingsBuilder()
                                 .put("base_path", basePath)
+                                .put("concurrent_streams", randomIntBetween(1, 5))
                                 .put("chunk_size", randomIntBetween(1000, 10000))
                 ).get();
         assertThat(putRepositoryResponse.isAcknowledged(), equalTo(true));
