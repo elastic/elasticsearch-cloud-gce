@@ -21,26 +21,33 @@ package org.elasticsearch.cloud.gce.blobstore;
 
 import org.elasticsearch.common.Preconditions;
 
-import java.io.IOException;
-import java.io.OutputStream;
-import java.io.PipedInputStream;
-import java.io.PipedOutputStream;
+import java.io.*;
 import java.util.concurrent.Executor;
 
 
 public class GoogleCloudStorageOutputStream extends OutputStream {
 
     /**
+     * Wraps the PipedOutputStream in a BufferedOutputStream
+     */
+    private BufferedOutputStream output;
+
+    /**
      * The PipedOutputStream is used by the caller to write data that are directly
      * piped to the PipedInputStream.
      */
-    private PipedOutputStream output = new PipedOutputStream();
+    private PipedOutputStream pipedout;
 
     /**
      * The PipedInputStream is used by a ConcurrentUpload object to read the data to send
      * to Google Cloud Storage.
      */
-    private PipedInputStream input;
+    private PipedInputStream pipedin;
+
+    /**
+     * Buffer size
+     */
+    private int bufferSize;
 
     /**
      * A ConcurrentUpload represents an upload request that is executed in the background.
@@ -53,30 +60,47 @@ public class GoogleCloudStorageOutputStream extends OutputStream {
      */
     private Executor executor;
 
-    public GoogleCloudStorageOutputStream(Executor executor, ConcurrentUpload upload) {
+    public GoogleCloudStorageOutputStream(Executor executor, ConcurrentUpload upload, int bufferSizeInBytes) {
         Preconditions.checkNotNull(executor, "An executor must be provided");
         this.executor = executor;
         Preconditions.checkNotNull(upload, "An upload request must be provided");
         this.upload = upload;
+        this.bufferSize = bufferSizeInBytes;
+
+        pipedout = new PipedOutputStream();
+        output = new BufferedOutputStream(pipedout, bufferSize);
     }
 
-    @Override
-    public void write(int b) throws IOException {
-        if (input == null) {
-            // Connects output -> input
-            input = new PipedInputStream(output);
+    private void initialize() throws IOException {
+        if (pipedin == null) {
+            // Connects pipedout -> pipedin
+            pipedin = new PipedInputStream(pipedout, bufferSize);
 
-            // Connects input -> concurrent upload
-            upload.initializeUpload(input);
+            // Connects pipedin -> concurrent upload
+            upload.initializeUpload(pipedin);
 
             // Starts the concurrent upload
             executor.execute(upload);
         }
+    }
 
-        // Rethrow exception if something wrong happen
-        checkForConcurrentUploadErrors();
+    @Override
+    public void write(int b) throws IOException {
+        initialize();
 
         output.write(b);
+    }
+
+    @Override
+    public void write(byte[] b, int off, int len) throws IOException {
+        initialize();
+
+        output.write(b, off, len);
+    }
+
+    @Override
+    public void flush() throws IOException {
+        output.flush();
     }
 
     @Override
@@ -89,7 +113,7 @@ public class GoogleCloudStorageOutputStream extends OutputStream {
             }
         }
 
-        if (input != null) {
+        if (pipedin != null) {
             try {
                 // Waits for the upload request to complete
                 upload.waitForCompletion();
@@ -99,7 +123,8 @@ public class GoogleCloudStorageOutputStream extends OutputStream {
 
             } finally {
                 output = null;
-                input = null;
+                pipedout = null;
+                pipedin = null;
                 upload = null;
             }
         }

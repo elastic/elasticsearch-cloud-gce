@@ -27,6 +27,7 @@ import org.elasticsearch.common.blobstore.BlobPath;
 import org.elasticsearch.common.blobstore.BlobStore;
 import org.elasticsearch.common.component.AbstractComponent;
 import org.elasticsearch.common.settings.Settings;
+import org.elasticsearch.common.unit.ByteSizeValue;
 
 import java.io.IOException;
 import java.nio.file.FileAlreadyExistsException;
@@ -45,11 +46,15 @@ public class GoogleCloudStorageBlobStore extends AbstractComponent implements Bl
 
     private final String bucket;
 
-    public GoogleCloudStorageBlobStore(Settings settings, Executor executor, GoogleCloudStorageService client, String projectName, String bucketName, String bucketLocation) throws IOException {
+    private final ByteSizeValue bufferSize;
+
+    public GoogleCloudStorageBlobStore(Settings settings, Executor executor, GoogleCloudStorageService client, String projectName,
+                                       String bucketName, String bucketLocation, ByteSizeValue bufferSize) throws IOException {
         super(settings);
         this.executor = executor;
         this.client = client;
         this.bucket = bucketName;
+        this.bufferSize =  bufferSize;
 
         try {
             if (!client.doesBucketExist(bucketName)) {
@@ -81,6 +86,10 @@ public class GoogleCloudStorageBlobStore extends AbstractComponent implements Bl
 
     public String bucket() {
         return bucket;
+    }
+
+    public int bufferSizeInBytes() {
+        return bufferSize.bytesAsInt();
     }
 
     @Override

@@ -176,11 +176,11 @@ public class GoogleCloudStorageServiceImpl extends AbstractLifecycleComponent<Go
     }
 
     @Override
-    public OutputStream getOutputStream(Executor executor, String bucketName, String blobName) throws IOException {
+    public OutputStream getOutputStream(Executor executor, String bucketName, String blobName, int bufferSizeInBytes) throws IOException {
         // The concurrent upload does buffering internally
         ConcurrentUpload upload = prepareConcurrentUpload(bucketName, blobName);
         // ConcurrentUpload is executed in a dedicated thread
-        return new GoogleCloudStorageOutputStream(executor, upload);
+        return new GoogleCloudStorageOutputStream(executor, upload, bufferSizeInBytes);
     }
 
     protected <T> T prepareConcurrentUpload(String bucketName, String blobName) {

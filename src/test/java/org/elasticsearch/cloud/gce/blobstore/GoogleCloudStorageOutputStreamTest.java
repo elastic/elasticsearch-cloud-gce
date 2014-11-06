@@ -22,6 +22,7 @@ package org.elasticsearch.cloud.gce.blobstore;
 import org.elasticsearch.cloud.gce.GoogleCloudStorageService;
 import org.elasticsearch.common.settings.ImmutableSettings;
 import org.elasticsearch.common.util.concurrent.EsExecutors;
+import org.elasticsearch.repositories.gce.GoogleCloudStorageRepository;
 import org.elasticsearch.repositories.gce.MockGoogleCloudStorageService;
 import org.elasticsearch.test.ElasticsearchTestCase;
 import org.junit.After;
@@ -46,6 +47,8 @@ import static org.hamcrest.Matchers.equalTo;
  */
 public class GoogleCloudStorageOutputStreamTest extends ElasticsearchTestCase {
 
+    private int bufferSize = GoogleCloudStorageRepository.DEFAULT_BUFFER_SIZE.bytesAsInt();
+
     private ExecutorService executor;
 
     @Before
@@ -67,7 +70,7 @@ public class GoogleCloudStorageOutputStreamTest extends ElasticsearchTestCase {
     @Test
     public void testWriteRandomDataToMockConcurrentUpload() throws IOException {
         ConcurrentUpload<byte[]> upload = new MockConcurrentUpload();
-        GoogleCloudStorageOutputStream out = new GoogleCloudStorageOutputStream(executor, upload);
+        GoogleCloudStorageOutputStream out = new GoogleCloudStorageOutputStream(executor, upload, bufferSize);
 
         Integer randomLength = randomIntBetween(1, 10000000);
         ByteArrayOutputStream content = new ByteArrayOutputStream(randomLength);
@@ -90,7 +93,7 @@ public class GoogleCloudStorageOutputStreamTest extends ElasticsearchTestCase {
         GoogleCloudStorageService service = new MockGoogleCloudStorageService(ImmutableSettings.EMPTY, result);
 
         GoogleCloudStorageConcurrentUpload upload = new GoogleCloudStorageConcurrentUpload(service, "test-bucket", "test-project");
-        GoogleCloudStorageOutputStream out = new GoogleCloudStorageOutputStream(executor, upload);
+        GoogleCloudStorageOutputStream out = new GoogleCloudStorageOutputStream(executor, upload, bufferSize);
 
         Integer randomLength = randomIntBetween(1, 10000000);
         ByteArrayOutputStream content = new ByteArrayOutputStream(randomLength);
@@ -139,7 +142,7 @@ public class GoogleCloudStorageOutputStreamTest extends ElasticsearchTestCase {
                     try {
                         GoogleCloudStorageService service = new MockGoogleCloudStorageService(ImmutableSettings.EMPTY, result);
                         GoogleCloudStorageConcurrentUpload upload = new GoogleCloudStorageConcurrentUpload(service, "test-bucket", "test-blob-" + num);
-                        GoogleCloudStorageOutputStream out = new GoogleCloudStorageOutputStream(executor, upload);
+                        GoogleCloudStorageOutputStream out = new GoogleCloudStorageOutputStream(executor, upload, bufferSize);
 
                         for (int i = 0; i < randomLength; i++) {
                             content.write(randomByte());

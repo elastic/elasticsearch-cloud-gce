@@ -49,6 +49,8 @@ public class GoogleCloudStorageRepository extends BlobStoreRepository {
 
     public final static String TYPE = "gcs";
 
+    public static final ByteSizeValue DEFAULT_BUFFER_SIZE = new ByteSizeValue(1, ByteSizeUnit.MB);
+
     private final GoogleCloudStorageBlobStore blobStore;
 
     private final BlobPath basePath;
@@ -105,11 +107,13 @@ public class GoogleCloudStorageRepository extends BlobStoreRepository {
         }
 
         int concurrentStreams = repositorySettings.settings().getAsInt("concurrent_streams", componentSettings.getAsInt("concurrent_streams", 5));
-        ExecutorService concurrentStreamPool = EsExecutors.newScaling(1, concurrentStreams, 5, TimeUnit.SECONDS, EsExecutors.daemonThreadFactory(settings, "[s3_stream]"));
+        ExecutorService concurrentStreamPool = EsExecutors.newScaling(1, concurrentStreams, 5, TimeUnit.SECONDS, EsExecutors.daemonThreadFactory(settings, "[gcs_stream]"));
+
+        ByteSizeValue bufferSize = repositorySettings.settings().getAsBytesSize(BUFFER_SIZE, componentSettings.getAsBytesSize(BUFFER_SIZE, DEFAULT_BUFFER_SIZE));
 
         logger.debug("using  projet id [{}], bucket [{}], location [{}], base_path [{}], chunk_size [{}], compress [{}]",
                 projectId, bucketName, bucketLocation, basePath, chunkSize, compress);
-        this.blobStore = new GoogleCloudStorageBlobStore(settings, concurrentStreamPool, googleCloudStorageService, projectId, bucketName, bucketLocation);
+        this.blobStore = new GoogleCloudStorageBlobStore(settings, concurrentStreamPool, googleCloudStorageService, projectId, bucketName, bucketLocation, bufferSize);
     }
 
 

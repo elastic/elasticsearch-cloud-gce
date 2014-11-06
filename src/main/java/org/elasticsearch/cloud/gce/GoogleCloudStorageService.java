@@ -37,6 +37,7 @@ public interface GoogleCloudStorageService extends LifecycleComponent<GoogleClou
         public static final String BUCKET = "bucket";
         public static final String BUCKET_LOCATION = "location";
         public static final String CHUNK_SIZE = "chunk_size";
+        public static final String BUFFER_SIZE = "buffer_size";
         public static final String COMPRESS = "compress";
         public static final String BASE_PATH = "base_path";
         public static final String CREDENTIALS_FILE = "credentials_file";
@@ -104,9 +105,10 @@ public interface GoogleCloudStorageService extends LifecycleComponent<GoogleClou
      * @param  executor
      * @param bucketName
      * @param blobName
+     * @param bufferSizeInBytes
      * @return
      */
-    OutputStream getOutputStream(Executor executor, String bucketName, String blobName) throws IOException;
+    OutputStream getOutputStream(Executor executor, String bucketName, String blobName, int bufferSizeInBytes) throws IOException;
 
     /**
      * List all blobs in a given bucket which have a prefix

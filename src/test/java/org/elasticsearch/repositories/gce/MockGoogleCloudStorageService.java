@@ -149,7 +149,7 @@ public class MockGoogleCloudStorageService extends AbstractLifecycleComponent<Go
     }
 
     @Override
-    public OutputStream getOutputStream(Executor executor, String bucketName, String blobName) throws IOException {
+    public OutputStream getOutputStream(Executor executor, String bucketName, String blobName, int bufferSize) throws IOException {
         ByteArrayOutputStream outputStream = new ByteArrayOutputStream();
         blobs.put(key(bucketName, blobName), outputStream);
         return outputStream;
