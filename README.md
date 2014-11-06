@@ -1,7 +1,10 @@
 Google Compute Engine Cloud Plugin for Elasticsearch
 ====================================================
 
-The GCE Cloud plugin allows to use GCE API for the unicast discovery mechanism.
+The GCE Cloud plugin allows to:
+
+* use the Google Compute Engine API for the unicast discovery mechanism
+* use the Google Cloud Storage service as a snapshot repository
 
 In order to install the plugin, run: 
 
@@ -29,6 +32,49 @@ mvn clean install
 plugin --install cloud-gce \ 
        --url file:target/releases/elasticsearch-cloud-gce-X.X.X-SNAPSHOT.zip
 ```
+
+
+Google Cloud Storage Repository
+===============================
+
+
+The gcs repository is using the [Google Cloud Storage](https://cloud.google.com/storage/) service to store snapshots. 
+The plugin uses a [service account](https://developers.google.com/accounts/docs/OAuth2ServiceAccount#creatinganaccount) authorization file 
+ to access to the GCS buckets. This way, the plugin can be used when deployed inside a Compute Engine instance or outside on a dedicated server.
+  
+To enable this fonctionnality, a service account file must be declared in the elasticsearch configuration file:
+
+```yaml
+repositories:
+    gce:
+        credentials_file: "/path/to/elasticsearch-cloud-gce-ddabc90e45.json"
+         
+```
+
+The repository can be created using the following command:
+
+```sh
+$ curl -XPUT 'http://localhost:9200/_snapshot/my_gcs_repository' -d '{
+    "type": "gcs",
+    "settings": {
+        "project_id": "my_project_id",
+        "bucket": "my_bucket_name"
+    }
+}'
+```
+
+The following settings are supported:
+
+* `project_id`: The id of the Google Cloud project. Defaults to `repositories.gcs.projet_id` or `cloud.gce.projet_id` (Mandatory)
+* `bucket`: The name of the bucket to be used for snapshots. (Mandatory)
+* `location`: The location where bucket is located. Defaults to US.
+* `base_path`: Specifies the path within bucket to repository data. Defaults to root directory.
+* `chunk_size`: Big files can be broken down into chunks during snapshotting if needed. The chunk size can be specified in bytes or by using size value notation, i.e. `1g`, `10m`, `5k`. Defaults to `100m`.
+* `compress`: When set to `true` metadata files are stored in compressed format. This setting doesn't affect index files that are already compressed by default. Defaults to `false`.
+* `buffer_size`: Size of the internal buffer used to upload snapshots to Google Cloud Storage. Defaults to `1mb`.
+* `application_name`: The name used by the plugin to connect to the Google Cloud Storage API. It can be changed to track quota. Defaults to `elasticsearch-google-cloud-storage-service`.
+
+Multiple GCS repositories can be created. Please note that all buckets must have the correct permissions configured on the Google Cloud console for the service account file.
 
 
 Google Compute Engine Virtual Machine Discovery
