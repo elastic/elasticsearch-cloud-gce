@@ -22,7 +22,6 @@ package org.elasticsearch.cloud.gce.blobstore;
 import com.google.api.client.googleapis.media.MediaHttpUploader;
 import com.google.api.services.storage.Storage;
 import com.google.api.services.storage.model.StorageObject;
-import org.apache.lucene.util.IOUtils;
 import org.elasticsearch.cloud.gce.GoogleCloudStorageService;
 
 import java.io.IOException;
@@ -75,7 +74,13 @@ public class GoogleCloudStorageConcurrentUpload implements ConcurrentUpload<Stor
 
         } finally {
             done.countDown();
-            IOUtils.closeWhileHandlingException(input);
+            if (input != null) {
+                try {
+                    input.close();
+                } catch (IOException e) {
+                    // Ignore
+                }
+            }
         }
     }
 

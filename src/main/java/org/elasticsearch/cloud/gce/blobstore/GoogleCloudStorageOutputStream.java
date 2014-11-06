@@ -19,7 +19,6 @@
 
 package org.elasticsearch.cloud.gce.blobstore;
 
-import org.apache.lucene.util.IOUtils;
 import org.elasticsearch.common.Preconditions;
 
 import java.io.IOException;
@@ -82,7 +81,13 @@ public class GoogleCloudStorageOutputStream extends OutputStream {
 
     @Override
     public void close() throws IOException {
-        IOUtils.closeWhileHandlingException(output);
+        if (output != null) {
+            try {
+                output.close();
+            } catch (IOException e) {
+                // Ignore
+            }
+        }
 
         if (input != null) {
             try {
@@ -93,7 +98,6 @@ public class GoogleCloudStorageOutputStream extends OutputStream {
                 checkForConcurrentUploadErrors();
 
             } finally {
-                IOUtils.closeWhileHandlingException(output);
                 output = null;
                 input = null;
                 upload = null;
