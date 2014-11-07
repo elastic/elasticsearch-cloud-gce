@@ -90,9 +90,8 @@ public class GoogleCloudStorageBlobContainer extends AbstractBlobContainer {
     }
 
     @Override
-    public boolean deleteBlob(String blobName) throws IOException {
+    public void deleteBlob(String blobName) throws IOException {
         blobStore.client().deleteBlob(blobStore.bucket(), buildKey(blobName));
-        return true;
     }
 
     @Override
