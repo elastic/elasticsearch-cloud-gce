@@ -19,7 +19,6 @@
 
 package org.elasticsearch.discovery.gce;
 
-import org.elasticsearch.Version;
 import org.elasticsearch.cloud.gce.GceComputeService;
 import org.elasticsearch.cluster.ClusterName;
 import org.elasticsearch.cluster.ClusterService;
@@ -50,7 +49,7 @@ public class GceDiscovery extends ZenDiscovery {
                         NetworkService networkService, DiscoverySettings discoverySettings,
                         ElectMasterService electMasterService) {
         super(settings, clusterName, threadPool, transportService, clusterService, nodeSettingsService,
-                discoveryNodeService, pingService, electMasterService, Version.CURRENT, discoverySettings);
+                discoveryNodeService, pingService, electMasterService, discoverySettings);
         if (settings.getAsBoolean("cloud.enabled", true)) {
             ImmutableList<? extends ZenPing> zenPings = pingService.zenPings();
             UnicastZenPing unicastZenPing = null;
