@@ -43,6 +43,8 @@ import org.elasticsearch.transport.TransportService;
  */
 public class GceDiscovery extends ZenDiscovery {
 
+    public static final String GCE = "gce";
+
     @Inject
     public GceDiscovery(Settings settings, ClusterName clusterName, ThreadPool threadPool, TransportService transportService,
                         ClusterService clusterService, NodeSettingsService nodeSettingsService, ZenPingService pingService,
