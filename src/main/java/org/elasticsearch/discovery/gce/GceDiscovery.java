@@ -19,6 +19,7 @@
 
 package org.elasticsearch.discovery.gce;
 
+import org.elasticsearch.Version;
 import org.elasticsearch.cloud.gce.GceComputeService;
 import org.elasticsearch.cluster.ClusterName;
 import org.elasticsearch.cluster.ClusterService;
@@ -47,7 +48,8 @@ public class GceDiscovery extends ZenDiscovery {
                         ClusterService clusterService, NodeSettingsService nodeSettingsService, ZenPingService pingService,
                         DiscoveryNodeService discoveryNodeService, GceComputeService gceComputeService,
                         NetworkService networkService, DiscoverySettings discoverySettings,
-                        ElectMasterService electMasterService) {
+                        ElectMasterService electMasterService,
+                        Version version) {
         super(settings, clusterName, threadPool, transportService, clusterService, nodeSettingsService,
                 discoveryNodeService, pingService, electMasterService, discoverySettings);
         if (settings.getAsBoolean("cloud.enabled", true)) {
@@ -64,7 +66,7 @@ public class GceDiscovery extends ZenDiscovery {
                 // update the unicast zen ping to add cloud hosts provider
                 // and, while we are at it, use only it and not the multicast for example
                 unicastZenPing.addHostsProvider(new GceUnicastHostsProvider(settings, gceComputeService,
-                        transportService, networkService));
+                        transportService, networkService, version));
                 pingService.zenPings(ImmutableList.of(unicastZenPing));
             } else {
                 logger.warn("failed to apply gce unicast discovery, no unicast ping found");
