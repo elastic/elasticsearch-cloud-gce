@@ -66,7 +66,7 @@ public abstract class AbstractGceTest extends ElasticsearchIntegrationTest {
             if (Strings.hasText(System.getProperty("tests.config"))) {
                 settings.loadFromUrl(environment.resolveConfig(System.getProperty("tests.config")));
             } else {
-                fail("to run integration tests, you need to set -Dtest.gce=true and -Dtests.config=/path/to/elasticsearch.yml");
+                fail("to run integration tests, you need to set -Dtests.gce=true and -Dtests.config=/path/to/elasticsearch.yml");
             }
         } catch (FailedToResolveConfigException exception) {
             fail("your test configuration file is incorrect: " + System.getProperty("tests.config"));
