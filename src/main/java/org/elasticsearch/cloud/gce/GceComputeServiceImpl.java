@@ -134,10 +134,12 @@ public class GceComputeServiceImpl extends AbstractLifecycleComponent<GceCompute
             logger.debug("token [{}] will expire in [{}] s", credential.getAccessToken(), credential.getExpiresInSeconds());
             refreshInterval = TimeValue.timeValueSeconds(credential.getExpiresInSeconds()-1);
 
+            RetryHttpInitializerWrapper retryHttpInitializerWrapper = new RetryHttpInitializerWrapper(credential);
+
             // Once done, let's use this token
             this.client = new Compute.Builder(HTTP_TRANSPORT, JSON_FACTORY, null)
                     .setApplicationName(Fields.VERSION)
-                    .setHttpRequestInitializer(credential)
+                    .setHttpRequestInitializer(retryHttpInitializerWrapper)
                     .build();
         } catch (Exception e) {
             logger.warn("unable to start GCE discovery service: {} : {}", e.getClass().getName(), e.getMessage());
