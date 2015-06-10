@@ -21,6 +21,7 @@ package org.elasticsearch.discovery.gce;
 
 import org.elasticsearch.cluster.ClusterName;
 import org.elasticsearch.cluster.ClusterService;
+import org.elasticsearch.cluster.node.DiscoveryNodeService;
 import org.elasticsearch.cluster.settings.ClusterDynamicSettings;
 import org.elasticsearch.cluster.settings.DynamicSettings;
 import org.elasticsearch.common.inject.Inject;
@@ -40,11 +41,12 @@ public class GceDiscovery extends ZenDiscovery {
 
     @Inject
     public GceDiscovery(Settings settings, ClusterName clusterName, ThreadPool threadPool, TransportService transportService,
-                        ClusterService clusterService, NodeSettingsService nodeSettingsService, ZenPingService pingService,
+                        ClusterService clusterService, NodeSettingsService nodeSettingsService, DiscoveryNodeService discoveryNodeService,
+                        ZenPingService pingService,
                         DiscoverySettings discoverySettings,
                         ElectMasterService electMasterService, @ClusterDynamicSettings DynamicSettings dynamicSettings) {
         super(settings, clusterName, threadPool, transportService, clusterService, nodeSettingsService,
-                pingService, electMasterService, discoverySettings, dynamicSettings);
+                discoveryNodeService, pingService, electMasterService, discoverySettings, dynamicSettings);
 
         // TODO Add again force disable multicast
         // See related issue in AWS plugin https://github.com/elastic/elasticsearch-cloud-aws/issues/179
