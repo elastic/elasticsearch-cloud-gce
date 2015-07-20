@@ -3,7 +3,7 @@ Google Compute Engine Cloud Plugin for Elasticsearch
 
 The GCE Cloud plugin allows to use GCE API for the unicast discovery mechanism.
 
-## Version 2.6.0-SNAPSHOT for Elasticsearch: 1.x
+## Version 2.7.0 for Elasticsearch: 1.7
 
 If you are looking for another version documentation, please refer to the 
 [compatibility matrix](https://github.com/elasticsearch/elasticsearch-cloud-gce/#google-compute-engine-cloud-plugin-for-elasticsearch).
