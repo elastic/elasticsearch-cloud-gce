@@ -3,7 +3,7 @@ Google Compute Engine Cloud Plugin for Elasticsearch
 
 The GCE Cloud plugin allows to use GCE API for the unicast discovery mechanism.
 
-In order to install the plugin, run: 
+In order to install the plugin, run:
 
 ```sh
 bin/plugin install elasticsearch/elasticsearch-cloud-gce/2.7.0
@@ -14,7 +14,7 @@ You need to install a version matching your Elasticsearch version:
 |       Elasticsearch    | GCE Cloud Plugin  |                                                             Docs                                                                   |
 |------------------------|-------------------|------------------------------------------------------------------------------------------------------------------------------------|
 |    master              | Build from source | See below                                                                                                                          |
-|    es-1.x              |     2.7.0         | [2.7.0](https://github.com/elastic/elasticsearch-cloud-gce/tree/v2.7.0/#version-270-for-elasticsearch-17)                  |
+|    es-1.7              |     2.7.0         | [2.7.0](https://github.com/elastic/elasticsearch-cloud-gce/tree/v2.7.0/#version-270-for-elasticsearch-17)                  |
 | es-1.6        |  2.6.0                | [2.6.0](https://github.com/elastic/elasticsearch-cloud-gce/tree/v2.6.0/#version-260-for-elasticsearch-16)  |
 |    es-1.5              |     2.5.0         | [2.5.0](https://github.com/elastic/elasticsearch-cloud-gce/tree/v2.5.0/#version-250-for-elasticsearch-15)                  |
 |    es-1.4              |     2.4.1         | [2.4.1](https://github.com/elasticsearch/elasticsearch-cloud-gce/tree/v2.4.1/#version-241-for-elasticsearch-14)                  |
@@ -28,7 +28,7 @@ To build a `SNAPSHOT` version, you need to build it with Maven:
 
 ```bash
 mvn clean install
-plugin --install cloud-gce \ 
+plugin --install cloud-gce \
        --url file:target/releases/elasticsearch-cloud-gce-X.X.X-SNAPSHOT.zip
 ```
 
@@ -125,7 +125,7 @@ It's important when creating an instance that the correct permissions are set. A
 service_account_scope=compute-rw
 ```
 
-Failing to set this will result in unauthorized messages when starting Elasticsearch. 
+Failing to set this will result in unauthorized messages when starting Elasticsearch.
 See [Machine Permissions](#machine-permissions).
 
 Once connected, install Elasticsearch:
@@ -249,12 +249,12 @@ gcutil deletedisk boot-myesnode1 boot-myesnode2  \
 Using zones
 -----------
 
-`cloud.gce.zone` helps to retrieve instances running in a given zone. It should be one of the 
+`cloud.gce.zone` helps to retrieve instances running in a given zone. It should be one of the
 [GCE supported zones](https://developers.google.com/compute/docs/zones#available).
 
-The GCE discovery can support multi zones although you need to be aware of network latency between zones. 
+The GCE discovery can support multi zones although you need to be aware of network latency between zones.
 To enable discovery across more than one zone, just enter add your zone list to `cloud.gce.zone` setting:
- 
+
 ```yaml
   cloud:
       gce:
@@ -374,7 +374,7 @@ Ensure the following flags are set:
 
 **Creating with console (web)**
 
-When creating an instance using the web portal, click **Show advanced options**. 
+When creating an instance using the web portal, click **Show advanced options**.
 
 At the bottom of the page, under `PROJECT ACCESS`, choose `>> Compute >> Read Write`.
 
@@ -398,7 +398,7 @@ Or, you may use the alias:
     --gce-service-account-scopes compute-rw
 ```
 
-If you have created a machine without the correct permissions, you will see `403 unauthorized` error messages. The only 
+If you have created a machine without the correct permissions, you will see `403 unauthorized` error messages. The only
 way to alter these permissions is to delete the instance (NOT THE DISK). Then create another with the correct permissions.
 
 
@@ -417,7 +417,7 @@ discovery:
       type: gce
 ```
 
-Replaces `project_id` and `zone` with your settings. 
+Replaces `project_id` and `zone` with your settings.
 
 To run test:
 
